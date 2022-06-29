@@ -1,5 +1,23 @@
-### Hi there 👋
-https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white
+<img src="https://user-images.githubusercontent.com/71642420/176534584-23de9f25-1278-44f8-9c51-f33b3e02e13d.png" alt="Introduction Banner.." style="text-align: center; margin-bottom: 30px;" />
+
+
+## I'm Scott-Ashley :wave:
+
+-   :computer: **Co-founder** of [Blott.io](https://blott.io) & [Blott.com](https://blott.com) and **Lead Product Designer**
+-   :monocle_face: Interested in everything **Fintech, Web3.0 and Crypto**
+-   :seedling: Currently learning **Flutter**
+-   :heart: All things Fintech
+-   :penguin: **Looking to build the next Fintech Unicorn** ... let's have a chat
+
+<br>
+<h2> 🚀 &nbsp;Some Tools I Have Used and Learned</h2>
+<p align="left">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="figma" width="45" height="45"/>
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="css" width="45" height="45"/>
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="html" width="45" height="45"/>
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-plain.svg" alt="vscode" width="45" height="45"/>
+</p>
+
 <!--
 **swhiteley21/swhiteley21** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 

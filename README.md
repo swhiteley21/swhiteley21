@@ -1,6 +1,3 @@
-<img src="https://user-images.githubusercontent.com/71642420/176534584-23de9f25-1278-44f8-9c51-f33b3e02e13d.png" alt="Introduction Banner.." style="text-align: center; margin-bottom: 30px;" />
-
-
 ## I'm Scott-Ashley :wave:
 
 -   :computer: **Co-founder** of [Blott.io](https://blott.io) & [Blott.com](https://blott.com) and **Lead Product Designer**

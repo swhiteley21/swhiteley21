@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Japan, 14 days — the journal</title>
+<meta name="description" content="An interactive journal and quiz from two weeks across Tokyo, Kyoto, Osaka and Hiroshima." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ground: #161A2E;       /* deep indigo night */
+    --ground-2: #1E2440;     /* raised indigo panel */
+    --text: #F2ECDB;         /* washi cream */
+    --text-dim: #A7A8B8;     /* muted */
+    --accent: #E2473A;       /* torii / hanko vermillion */
+    --accent-soft: rgba(226, 71, 58, 0.14);
+    --matcha: #9DB36A;       /* matcha green */
+    --matcha-soft: rgba(157, 179, 106, 0.16);
+    --gold: #C9A24B;         /* stamp gold */
+    --line: rgba(242, 236, 219, 0.16);
+    --maxw: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background-color: var(--ground);
+    /* faint seigaiha-style atmosphere, kept low */
+    background-image:
+      radial-gradient(circle at 50% 100%, transparent 14px, var(--line) 15px, transparent 16px);
+    background-size: 56px 28px;
+    background-position: 0 0;
+    color: var(--text);
+    font-family: "Zen Kaku Gothic New", system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--accent); color: var(--text); }
+
+  a { color: var(--accent); }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  .eyebrow {
+    font-family: "Space Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 96px 24px 64px;
+    overflow: hidden;
+  }
+  .hero__inner { max-width: var(--maxw); margin: 0 auto; width: 100%; position: relative; z-index: 2; }
+  .hero__kicker {
+    display: flex; align-items: center; gap: 14px;
+    font-family: "Space Mono", monospace;
+    font-size: 0.78rem; letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 28px;
+  }
+  .hero__kicker::before {
+    content: ""; width: 42px; height: 1px; background: var(--accent); display: inline-block;
+  }
+  .hero__title {
+    font-family: "Shippori Mincho", serif;
+    font-weight: 800;
+    font-size: clamp(3.4rem, 13vw, 9.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .hero__title .jp { display: block; color: var(--accent); font-size: 0.42em; letter-spacing: 0.14em; margin-bottom: 0.2em; font-weight: 700; }
+  .hero__title em { font-style: normal; color: var(--matcha); }
+  .hero__sub {
+    font-size: clamp(1rem, 2.4vw, 1.35rem);
+    max-width: 40ch;
+    color: var(--text);
+    margin: 28px 0 0;
+  }
+  .hero__sub span { color: var(--text-dim); }
+
+  .stats {
+    display: flex; flex-wrap: wrap; gap: 36px 56px;
+    margin-top: 56px; padding-top: 32px;
+    border-top: 1px solid var(--line);
+  }
+  .stat__n {
+    font-family: "Shippori Mincho", serif; font-weight: 700;
+    font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1; display: block;
+  }
+  .stat__l {
+    font-family: "Space Mono", monospace; font-size: 0.7rem;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-top: 8px;
+  }
+
+  /* hanko seal */
+  .seal {
+    position: absolute; z-index: 1;
+    top: 8%; right: 4%;
+    width: clamp(120px, 22vw, 220px); height: clamp(120px, 22vw, 220px);
+    border: 3px solid var(--accent); border-radius: 12px;
+    color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    transform: rotate(-9deg);
+    opacity: 0.92;
+    box-shadow: inset 0 0 0 4px var(--ground), inset 0 0 0 6px var(--accent);
+  }
+  .seal span {
+    font-family: "Shippori Mincho", serif; font-weight: 800;
+    font-size: clamp(2.4rem, 7vw, 4.4rem); line-height: 1; text-align: center;
+    writing-mode: vertical-rl; letter-spacing: 0.1em;
+  }
+  @media (max-width: 720px) { .seal { top: auto; bottom: 3%; right: 6%; opacity: 0.6; } }
+
+  .scroll-hint {
+    position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+    font-family: "Space Mono", monospace; font-size: 0.68rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--text-dim); z-index: 2;
+  }
+
+  /* ---------- ROUTE ---------- */
+  .route { padding: 88px 0; border-top: 1px solid var(--line); }
+  .route h2, .journal h2, .quiz h2, .gallery h2 {
+    font-family: "Shippori Mincho", serif; font-weight: 700;
+    font-size: clamp(1.8rem, 5vw, 2.8rem); margin: 10px 0 0; line-height: 1.1;
+  }
+  .route__line {
+    display: flex; align-items: flex-start; gap: 0;
+    margin-top: 48px; position: relative; overflow-x: auto; padding-bottom: 8px;
+  }
+  .stop { flex: 1 1 0; min-width: 92px; text-align: center; position: relative; }
+  .stop::before {
+    content: ""; position: absolute; top: 9px; left: 50%; right: -50%;
+    height: 2px; background: var(--line);
+  }
+  .stop:last-child::before { display: none; }
+  .stop__dot {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--ground); border: 2px solid var(--accent);
+    margin: 0 auto 14px; position: relative; z-index: 2;
+  }
+  .stop--major .stop__dot { background: var(--accent); box-shadow: 0 0 0 5px var(--accent-soft); }
+  .stop__name { font-family: "Shippori Mincho", serif; font-weight: 600; font-size: 1.02rem; }
+  .stop__jp { color: var(--text-dim); font-size: 0.8rem; }
+  .stop__meta { font-family: "Space Mono", monospace; font-size: 0.66rem; letter-spacing: 0.12em; color: var(--accent); margin-top: 6px; text-transform: uppercase; }
+
+  /* ---------- JOURNAL ---------- */
+  .journal { padding: 88px 0 40px; border-top: 1px solid var(--line); }
+  .chapter { margin-top: 64px; }
+  .chapter__head {
+    display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap;
+    padding-bottom: 18px; margin-bottom: 8px; border-bottom: 1px solid var(--line);
+  }
+  .chapter__city { font-family: "Shippori Mincho", serif; font-weight: 700; font-size: clamp(1.5rem, 4vw, 2.1rem); }
+  .chapter__jp { color: var(--accent); font-family: "Shippori Mincho", serif; font-size: 1.1rem; }
+  .chapter__dates { font-family: "Space Mono", monospace; font-size: 0.72rem; letter-spacing: 0.16em; color: var(--text-dim); margin-left: auto; text-transform: uppercase; }
+
+  .day {
+    display: grid; grid-template-columns: 96px 1fr; gap: 0 28px;
+    padding: 36px 0; border-bottom: 1px solid var(--line);
+  }
+  .day__num {
+    font-family: "Shippori Mincho", serif; font-weight: 800;
+    font-size: 2.6rem; line-height: 1; color: var(--accent);
+  }
+  .day__date { font-family: "Space Mono", monospace; font-size: 0.68rem; letter-spacing: 0.12em; color: var(--text-dim); margin-top: 8px; }
+  .day__title { font-family: "Shippori Mincho", serif; font-weight: 600; font-size: 1.35rem; margin: 0 0 14px; }
+  .moments { list-style: none; padding: 0; margin: 0; }
+  .moments li {
+    position: relative; padding-left: 22px; margin-bottom: 9px; color: var(--text);
+  }
+  .moments li::before {
+    content: ""; position: absolute; left: 0; top: 11px;
+    width: 7px; height: 7px; background: var(--matcha); border-radius: 50%;
+  }
+  .moments li b { color: var(--text); font-weight: 700; }
+  .moments .quote { color: var(--matcha); font-style: italic; }
+
+  .photos {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px; margin-top: 20px;
+  }
+  .photo {
+    position: relative; aspect-ratio: 4 / 3; border-radius: 8px; overflow: hidden;
+    background: var(--ground-2); border: 1px solid var(--line);
+    background-size: cover; background-position: center;
+  }
+  .photo__ph {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; padding: 12px; gap: 8px;
+  }
+  .photo__ph svg { opacity: 0.4; }
+  .photo__cap {
+    font-family: "Space Mono", monospace; font-size: 0.62rem; letter-spacing: 0.06em;
+    color: var(--text-dim); line-height: 1.4;
+  }
+  .photo.is-loaded .photo__ph { display: none; }
+
+  @media (max-width: 640px) {
+    .day { grid-template-columns: 64px 1fr; gap: 0 16px; }
+    .day__num { font-size: 1.9rem; }
+  }
+
+  /* ---------- QUIZ ---------- */
+  .quiz { padding: 96px 0; border-top: 1px solid var(--line); background:
+      linear-gradient(180deg, transparent, rgba(157,179,106,0.04) 50%, transparent); }
+  .quiz__intro { max-width: 56ch; margin-top: 18px; color: var(--text-dim); }
+  .quiz__board {
+    margin-top: 40px; background: var(--ground-2); border: 1px solid var(--line);
+    border-radius: 16px; padding: clamp(22px, 4vw, 44px);
+    position: relative; overflow: hidden;
+  }
+  .quiz__progress { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; flex-wrap: wrap; }
+  .quiz__count { font-family: "Space Mono", monospace; font-size: 0.74rem; letter-spacing: 0.16em; color: var(--text-dim); text-transform: uppercase; }
+  .quiz__bar { flex: 1; min-width: 120px; height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; }
+  .quiz__bar i { display: block; height: 100%; width: 0; background: var(--matcha); transition: width 0.4s ease; }
+  .quiz__stamps { display: flex; gap: 6px; }
+  .quiz__stamps b {
+    width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--line);
+    transition: all 0.3s ease;
+  }
+  .quiz__stamps b.on { background: var(--accent); border-color: var(--accent); }
+
+  .q__num { font-family: "Space Mono", monospace; color: var(--accent); font-size: 0.78rem; letter-spacing: 0.18em; }
+  .q__text { font-family: "Shippori Mincho", serif; font-weight: 600; font-size: clamp(1.25rem, 3vw, 1.7rem); margin: 10px 0 24px; line-height: 1.3; }
+  .q__opts { display: grid; gap: 12px; }
+  .opt {
+    text-align: left; font: inherit; color: var(--text); cursor: pointer;
+    background: var(--ground); border: 1px solid var(--line); border-radius: 10px;
+    padding: 15px 18px; transition: border-color 0.2s, background 0.2s, transform 0.1s;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .opt:active:not(:disabled) { transform: scale(0.99); }
+  .opt:focus-visible { outline: 2px solid var(--matcha); outline-offset: 2px; }
+  .opt__key {
+    font-family: "Space Mono", monospace; font-size: 0.8rem; color: var(--text-dim);
+    border: 1px solid var(--line); border-radius: 6px; width: 26px; height: 26px;
+    display: inline-flex; align-items: center; justify-content: center; flex: none;
+  }
+  .opt.correct { border-color: var(--matcha); background: var(--matcha-soft); }
+  .opt.correct .opt__key { border-color: var(--matcha); color: var(--matcha); }
+  .opt.wrong { border-color: var(--accent); background: var(--accent-soft); }
+  .opt:disabled { cursor: default; }
+
+  .q__reveal {
+    margin-top: 22px; padding: 18px 20px; border-left: 3px solid var(--matcha);
+    background: rgba(0,0,0,0.18); border-radius: 0 10px 10px 0;
+    font-size: 0.95rem; display: none;
+  }
+  .q__reveal.show { display: block; animation: fade 0.4s ease; }
+  .q__reveal b { color: var(--matcha); }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .q__next {
+    margin-top: 24px; font: inherit; font-family: "Space Mono", monospace;
+    letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.78rem;
+    background: var(--accent); color: var(--text); border: none; border-radius: 8px;
+    padding: 13px 26px; cursor: pointer; display: none;
+  }
+  .q__next.show { display: inline-block; }
+  .q__next:focus-visible { outline: 2px solid var(--matcha); outline-offset: 2px; }
+
+  /* result */
+  .result { text-align: center; padding: 20px 0; display: none; }
+  .result.show { display: block; }
+  .result__seal {
+    width: 150px; height: 150px; margin: 0 auto 26px; border: 3px solid var(--accent);
+    border-radius: 14px; color: var(--accent); display: flex; align-items: center; justify-content: center;
+    box-shadow: inset 0 0 0 4px var(--ground-2), inset 0 0 0 6px var(--accent);
+    animation: stamp 0.5s cubic-bezier(0.2, 1.4, 0.4, 1);
+  }
+  .result__seal span { font-family: "Shippori Mincho", serif; font-weight: 800; font-size: 3.6rem; writing-mode: vertical-rl; letter-spacing: 0.1em; }
+  @keyframes stamp { 0% { transform: scale(2.2) rotate(-14deg); opacity: 0; } 60% { opacity: 1; } 100% { transform: scale(1) rotate(-7deg); } }
+  .result__score { font-family: "Shippori Mincho", serif; font-size: 2.4rem; font-weight: 700; }
+  .result__rank { color: var(--matcha); font-family: "Space Mono", monospace; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 6px; }
+  .result__again {
+    margin-top: 26px; font-family: "Space Mono", monospace; font-size: 0.76rem; letter-spacing: 0.12em;
+    text-transform: uppercase; background: transparent; color: var(--text); border: 1px solid var(--line);
+    border-radius: 8px; padding: 12px 24px; cursor: pointer;
+  }
+  .result__again:hover { border-color: var(--matcha); }
+
+  /* ---------- GALLERY ---------- */
+  .gallery { padding: 96px 0; border-top: 1px solid var(--line); }
+  .gallery__top { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .upload {
+    font-family: "Space Mono", monospace; font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--ground-2); color: var(--text); border: 1px dashed var(--line); border-radius: 10px;
+    padding: 14px 22px; cursor: pointer; transition: border-color 0.2s;
+  }
+  .upload:hover { border-color: var(--matcha); }
+  .upload input { display: none; }
+  .gallery__note { color: var(--text-dim); font-size: 0.86rem; max-width: 54ch; margin: 14px 0 0; }
+  .gallery__grid {
+    margin-top: 36px; columns: 4 200px; column-gap: 14px;
+  }
+  .gallery__grid img, .gallery__grid .gph {
+    width: 100%; margin-bottom: 14px; border-radius: 10px; display: block; break-inside: avoid;
+    border: 1px solid var(--line);
+  }
+  .gph {
+    aspect-ratio: 3/4; background: var(--ground-2); display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim); font-family: "Space Mono", monospace; font-size: 0.66rem; text-align: center; padding: 16px;
+  }
+  .gph:nth-child(3n) { aspect-ratio: 1; }
+  .gph:nth-child(4n) { aspect-ratio: 4/5; }
+
+  /* ---------- CLOSING ---------- */
+  .closing { padding: 110px 0 80px; border-top: 1px solid var(--line); text-align: center; }
+  .closing__jp { font-family: "Shippori Mincho", serif; color: var(--accent); font-size: 2rem; }
+  .closing blockquote {
+    font-family: "Shippori Mincho", serif; font-weight: 600;
+    font-size: clamp(1.5rem, 4vw, 2.4rem); line-height: 1.4; margin: 18px auto 0; max-width: 24ch;
+  }
+  .closing__cite { font-family: "Space Mono", monospace; font-size: 0.72rem; letter-spacing: 0.16em; color: var(--text-dim); text-transform: uppercase; margin-top: 24px; }
+  footer { padding: 36px 0 60px; text-align: center; color: var(--text-dim); font-family: "Space Mono", monospace; font-size: 0.7rem; letter-spacing: 0.1em; }
+
+  /* reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .result__seal { animation: none; }
+    *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="seal" aria-hidden="true"><span>日本</span></div>
+  <div class="hero__inner">
+    <p class="hero__kicker">15 — 28 May · Tokyo · Kyoto · Osaka · Hiroshima</p>
+    <h1 class="hero__title">
+      <span class="jp">に ほ ん</span>
+      Japan,<br /><em>fourteen</em> days
+    </h1>
+    <p class="hero__sub">Eight of us, five cities, one growing stamp book and an indecent amount of matcha. <span>Scroll for the journal, or skip to the quiz to see how much actually stuck.</span></p>
+
+    <div class="stats">
+      <div class="stat"><span class="stat__n">14</span><span class="stat__l">Days</span></div>
+      <div class="stat"><span class="stat__n">5</span><span class="stat__l">Cities</span></div>
+      <div class="stat"><span class="stat__n">4</span><span class="stat__l">Shinkansen legs</span></div>
+      <div class="stat"><span class="stat__n">∞</span><span class="stat__l">Cups of matcha</span></div>
+      <div class="stat"><span class="stat__n">1</span><span class="stat__l">Phone stolen by Dhaya</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true">↓ scroll</div>
+</header>
+
+<main>
+
+<!-- ===================== ROUTE ===================== -->
+<section class="route">
+  <div class="wrap reveal">
+    <p class="eyebrow">The route</p>
+    <h2>How we moved</h2>
+    <div class="route__line">
+      <div class="stop stop--major"><div class="stop__dot"></div><div class="stop__name">Tokyo</div><div class="stop__jp">東京</div><div class="stop__meta">15–19 May</div></div>
+      <div class="stop"><div class="stop__dot"></div><div class="stop__name">Mt Fuji</div><div class="stop__jp">富士山</div><div class="stop__meta">18 May</div></div>
+      <div class="stop stop--major"><div class="stop__dot"></div><div class="stop__name">Kyoto</div><div class="stop__jp">京都</div><div class="stop__meta">20–23 May</div></div>
+      <div class="stop stop--major"><div class="stop__dot"></div><div class="stop__name">Osaka</div><div class="stop__jp">大阪</div><div class="stop__meta">23–25 May</div></div>
+      <div class="stop"><div class="stop__dot"></div><div class="stop__name">Hiroshima</div><div class="stop__jp">広島</div><div class="stop__meta">24 May</div></div>
+      <div class="stop stop--major"><div class="stop__dot"></div><div class="stop__name">Tokyo</div><div class="stop__jp">東京</div><div class="stop__meta">26–28 May</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== JOURNAL ===================== -->
+<section class="journal">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">The journal</p>
+      <h2>Day by day</h2>
+    </div>
+
+    <!-- CHAPTER: TOKYO -->
+    <div class="chapter reveal">
+      <div class="chapter__head">
+        <span class="chapter__city">Tokyo</span><span class="chapter__jp">東京</span>
+        <span class="chapter__dates">15–19 May</span>
+      </div>
+
+      <article class="day">
+        <div><div class="day__num">01</div><div class="day__date">15 May</div></div>
+        <div>
+          <h3 class="day__title">Landing, and getting gloriously lost</h3>
+          <ul class="moments">
+            <li>First 7-Eleven egg sando. A genuinely life-changing convenience-store sandwich.</li>
+            <li>Red bus tour, on which we promptly got lost.</li>
+            <li>Asakusa food market, then Kappabashi (kitchen) street for knife shopping.</li>
+            <li>Miso ramen lunch with the <b>bird-flying man</b>.</li>
+            <li>Walk through Shibuya and up Harajuku's Takeshita street.</li>
+            <li>Izakaya and sake, where they politely <b>put us in the corner</b>.</li>
+            <li>Shibuya crossing at night, then Don Quijote chaos.</li>
+            <li>Uber home because the station had closed.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="t01a"><div class="photo__ph"><div class="photo__cap">7-Eleven egg sando<br />photos/t01a.jpg</div></div></div>
+            <div class="photo" data-photo="t01b"><div class="photo__ph"><div class="photo__cap">Shibuya crossing<br />photos/t01b.jpg</div></div></div>
+            <div class="photo" data-photo="t01c"><div class="photo__ph"><div class="photo__cap">Asakusa market<br />photos/t01c.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div><div class="day__num">02</div><div class="day__date">16 May</div></div>
+        <div>
+          <h3 class="day__title">Shrines, parks and the first stamp</h3>
+          <ul class="moments">
+            <li>Nakano City in the morning.</li>
+            <li><b>Started the stamp collection.</b> The book that would rule the trip.</li>
+            <li>Yakitori with a yuzu dressing.</li>
+            <li>Meiji shrine and the prayer ritual, then Yoyogi park.</li>
+            <li>Shinjuku food tour and beers (Will, and the obnoxious American girl).</li>
+            <li>A wander through the red-light district.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="t02a"><div class="photo__ph"><div class="photo__cap">Meiji shrine<br />photos/t02a.jpg</div></div></div>
+            <div class="photo" data-photo="t02b"><div class="photo__ph"><div class="photo__cap">The first stamp<br />photos/t02b.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div><div class="day__num">03</div><div class="day__date">17 May</div></div>
+        <div>
+          <h3 class="day__title">The Imperial Palace and Ueno</h3>
+          <ul class="moments">
+            <li>Imperial Palace tour, played through with the <b>silent game</b>.</li>
+            <li>Unagi (eel) for lunch, with Japanese sansho pepper.</li>
+            <li>Ueno market: matcha ice cream that leaked over the top. Dave wasn't sure the shoes were real, then bought them anyway.</li>
+            <li>Ueno park, with the urinals fully on display.</li>
+            <li>Back to the market for my Mt Fuji artwork.</li>
+            <li>Same train, different stations. Fried chicken and sushi with Kewpie mayo, and a top-loader washing machine to round it off.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="t03a"><div class="photo__ph"><div class="photo__cap">Imperial Palace<br />photos/t03a.jpg</div></div></div>
+            <div class="photo" data-photo="t03b"><div class="photo__ph"><div class="photo__cap">Mt Fuji artwork<br />photos/t03b.jpg</div></div></div>
+            <div class="photo" data-photo="t03c"><div class="photo__ph"><div class="photo__cap">Matcha ice cream<br />photos/t03c.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div><div class="day__num">04</div><div class="day__date">18 May</div></div>
+        <div>
+          <h3 class="day__title">Mt Fuji</h3>
+          <ul class="moments">
+            <li>Mt Fuji tour: a temple in the forest, a speedboat across the lake, and the obligatory Lawson stop.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="t04a"><div class="photo__ph"><div class="photo__cap">Mt Fuji<br />photos/t04a.jpg</div></div></div>
+            <div class="photo" data-photo="t04b"><div class="photo__ph"><div class="photo__cap">Forest temple<br />photos/t04b.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div><div class="day__num">05</div><div class="day__date">19 May</div></div>
+        <div>
+          <h3 class="day__title">Family, the Sky, and the fish market</h3>
+          <ul class="moments">
+            <li>Met Ness's mom and dad, aunt and uncle.</li>
+            <li>Shibuya Sky, where <b>Dhaya stole Scott's phone</b>.</li>
+            <li>Tsukiji fish market: wagyu sirloin, tuna at three different fat levels, baby octopus.</li>
+            <li>A crème brûlée stuffed sandwich, because why not.</li>
+            <li>Izakaya dinner with Ness's family, where we accidentally ordered far too many drinks.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="t05a"><div class="photo__ph"><div class="photo__cap">Shibuya Sky<br />photos/t05a.jpg</div></div></div>
+            <div class="photo" data-photo="t05b"><div class="photo__ph"><div class="photo__cap">Tsukiji tuna<br />photos/t05b.jpg</div></div></div>
+            <div class="photo" data-photo="t05c"><div class="photo__ph"><div class="photo__cap">Family izakaya<br />photos/t05c.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- CHAPTER: KYOTO -->
+    <div class="chapter reveal">
+      <div class="chapter__head">
+        <span class="chapter__city">Kyoto</span><span class="chapter__jp">京都</span>
+        <span class="chapter__dates">20–23 May</span>
+      </div>
+
+      <article class="day">
+        <div><div class="day__num">06</div><div class="day__date">20 May</div></div>
+        <div>
+          <h3 class="day__title">Bullet train west</h3>
+          <ul class="moments">
+            <li>Early Shinkansen to Kyoto.</li>
+            <li>Bus into our area. We didn't know how to pay and kept the whole bus waiting.</li>
+            <li>Mic's leg swollen. Market run for blue trousers, then checked into the fish BnB.</li>
+            <li>Hambāgu, cat-repellent water bottles outside every door, and Scott zoning in on his meal so hard he forgot to share.</li>
+            <li>Geishas spotted. Matcha beer to finish.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="k06a"><div class="photo__ph"><div class="photo__cap">Shinkansen<br />photos/k06a.jpg</div></div></div>
+            <div class="photo" data-photo="k06b"><div class="photo__ph"><div class="photo__cap">Geisha sighting<br />photos/k06b.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div><div class="day__num">07</div><div class="day__date">21 May</div></div>
+        <div>
+          <h3 class="day__title">The ten-hour walking tour</h3>
+          <ul class="moments">
+            <li>Kyoto walking tour, all ten hours of it. <span class="quote">"I only learn to be content."</span></li>
+            <li>Conveyor-belt sushi at £7.50, and a free folder won for eating enough plates (it became very useful).</li>
+            <li>North / south / east / west chimes at the robot. Tanuki statues and their famously large anatomy.</li>
+            <li>Lessons learnt: chewing gum sucks, Uniqlo umbrellas are kak, and Pocari Sweat is made by a medical company.</li>
+            <li>Kinkaku-ji, the golden temple, where the gold leaf is cleaned every night between 3am and 6am. Pikachu, the "lightning mouse". "Ah-mm", A-to-Z protection.</li>
+            <li>Kiyomizu-dera: <span class="quote">"let's jump off the stage"</span> meaning let's make a big decision. Drank the spring water, and crawled through the wishing hole to let go of bad people and situations.</li>
+            <li>Geiko-san vs maiko-san explained. Ramen with noodles to finish, while David left us for a foot massage.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="k07a"><div class="photo__ph"><div class="photo__cap">Kinkaku-ji<br />photos/k07a.jpg</div></div></div>
+            <div class="photo" data-photo="k07b"><div class="photo__ph"><div class="photo__cap">Kiyomizu-dera<br />photos/k07b.jpg</div></div></div>
+            <div class="photo" data-photo="k07c"><div class="photo__ph"><div class="photo__cap">£7.50 sushi<br />photos/k07c.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div><div class="day__num">08</div><div class="day__date">22 May</div></div>
+        <div>
+          <h3 class="day__title">Tea ceremony day</h3>
+          <ul class="moments">
+            <li>Matcha in the morning. Scott went for a roasted iced matcha.</li>
+            <li>Tea ceremony: two scoops of matcha (2g) to 70ml of water at 80–90°C. The full ceremony runs two to four hours.</li>
+            <li>Katsu curry with the zen man, a clean 10/10. Beno earned mad points.</li>
+            <li>Split up for Nishiki market, then large-intestine skewers and beets in a tiny bar.</li>
+            <li>Went delirious hunting for a restaurant, and Dave and Ben nearly broke up over it.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="k08a"><div class="photo__ph"><div class="photo__cap">Tea ceremony<br />photos/k08a.jpg</div></div></div>
+            <div class="photo" data-photo="k08b"><div class="photo__ph"><div class="photo__cap">Nishiki market<br />photos/k08b.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- CHAPTER: OSAKA -->
+    <div class="chapter reveal">
+      <div class="chapter__head">
+        <span class="chapter__city">Osaka</span><span class="chapter__jp">大阪</span>
+        <span class="chapter__dates">23–25 May</span>
+      </div>
+
+      <article class="day">
+        <div><div class="day__num">09</div><div class="day__date">23 May</div></div>
+        <div>
+          <h3 class="day__title">Kyoto goodbye, Osaka hello</h3>
+          <ul class="moments">
+            <li>Checked out and walked the pagoda area buying gifts. Pork sando (Taku sando) for the road.</li>
+            <li>Shinkansen to Osaka.</li>
+            <li>Food tour: sausu sauce (brown sugar, soy sauce, Worcestershire sauce), yuzu ice cream, and "ookini", the Osaka way to say be well.</li>
+            <li>Karaoke with Australians and Germans. Sang 99 Luftballons in German.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="o09a"><div class="photo__ph"><div class="photo__cap">Dotonbori lights<br />photos/o09a.jpg</div></div></div>
+            <div class="photo" data-photo="o09b"><div class="photo__ph"><div class="photo__cap">Karaoke<br />photos/o09b.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div><div class="day__num">10</div><div class="day__date">24 May</div></div>
+        <div>
+          <h3 class="day__title">Hiroshima day trip</h3>
+          <ul class="moments">
+            <li>Shinkansen to Hiroshima.</li>
+            <li>The tour: the bomb, "Little Boy", detonated 600m above the ground. A typhoon swept away the radiation, leaving the land habitable within two months.</li>
+            <li>The land was mostly man-made, dug out from the mountains and largely flat, which is why it was chosen, with mountains behind to ricochet the blast for maximum effect.</li>
+            <li>Walked the town, ate okonomiyaki (the egg pancake).</li>
+            <li>Shinkansen back to Osaka, a walk around Dotonbori, then all-you-can-eat wagyu where we very nearly died.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="o10a"><div class="photo__ph"><div class="photo__cap">Hiroshima<br />photos/o10a.jpg</div></div></div>
+            <div class="photo" data-photo="o10b"><div class="photo__ph"><div class="photo__cap">Okonomiyaki<br />photos/o10b.jpg</div></div></div>
+            <div class="photo" data-photo="o10c"><div class="photo__ph"><div class="photo__cap">Wagyu feast<br />photos/o10c.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div><div class="day__num">11</div><div class="day__date">25 May</div></div>
+        <div>
+          <h3 class="day__title">Retro Osaka</h3>
+          <ul class="moments">
+            <li>Woke up at a reasonable hour for once. Train to Nakazakicho, old-town Osaka with retro charm.</li>
+            <li>Brunch at an eclectic spot: French toast, egg sando and an "English breakfast".</li>
+            <li>Thrifting through the streets, then a 10/10 matcha frappe at Meiz, with a Google Translate conversation with the matcha man. Bought our core good-luck man.</li>
+            <li>Octopus stone at Osaka Castle, and Kendo on display, the bamboo-sword sport with the fencing-style helmet.</li>
+            <li>Walked the longest shopping arcade in Japan.</li>
+            <li>A hole-in-the-wall dandan noodle joint with Japanese rock music, and a secret serving of risotto made from the leftover broth.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="o11a"><div class="photo__ph"><div class="photo__cap">Nakazakicho<br />photos/o11a.jpg</div></div></div>
+            <div class="photo" data-photo="o11b"><div class="photo__ph"><div class="photo__cap">Osaka Castle<br />photos/o11b.jpg</div></div></div>
+            <div class="photo" data-photo="o11c"><div class="photo__ph"><div class="photo__cap">Matcha frappe<br />photos/o11c.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- CHAPTER: TOKYO AGAIN -->
+    <div class="chapter reveal">
+      <div class="chapter__head">
+        <span class="chapter__city">Tokyo, again</span><span class="chapter__jp">東京</span>
+        <span class="chapter__dates">26–28 May</span>
+      </div>
+
+      <article class="day">
+        <div><div class="day__num">12</div><div class="day__date">26 May</div></div>
+        <div>
+          <h3 class="day__title">Back to the capital</h3>
+          <ul class="moments">
+            <li>Shinkansen to Tokyo.</li>
+            <li>Shopped at GU and Uniqlo.</li>
+            <li>Italian for dinner: carbonara, pizza and tiramisu.</li>
+            <li>Midnight Don Quijote run for a bag. Failed.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="t12a"><div class="photo__ph"><div class="photo__cap">Tokyo return<br />photos/t12a.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div><div class="day__num">13</div><div class="day__date">27 May</div></div>
+        <div>
+          <h3 class="day__title">Coffee, cake and old town</h3>
+          <ul class="moments">
+            <li>Kiyosumi area, with a strawberry cream roll and custard puff at a stony bakery run by a sweet old man.</li>
+            <li>The most insane coffees at First Crop Coffee: espresso tonic and flat whites. For the espresso tonic, use a light-roast espresso (caramel undertones if you can) over a glass of tonic water.</li>
+            <li>Matcha cheesecake and a blossom latte at Blue Bottle.</li>
+            <li>Yanaka old town, with the cemetery, salt rocks and black garlic.</li>
+            <li>Bar hopping on Hoppy Street, arriving in a very fancy Uber.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="t13a"><div class="photo__ph"><div class="photo__cap">Espresso tonic<br />photos/t13a.jpg</div></div></div>
+            <div class="photo" data-photo="t13b"><div class="photo__ph"><div class="photo__cap">Yanaka<br />photos/t13b.jpg</div></div></div>
+            <div class="photo" data-photo="t13c"><div class="photo__ph"><div class="photo__cap">Hoppy Street<br />photos/t13c.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div><div class="day__num">14</div><div class="day__date">28 May</div></div>
+        <div>
+          <h3 class="day__title">Last day</h3>
+          <ul class="moments">
+            <li>Senso-ji temple, on the hunt for Tanuki.</li>
+            <li>Uniqlo, Muji and Standard Products in Ginza.</li>
+            <li>Nakameguro: a walk along the river, and finding a gift for Bree.</li>
+          </ul>
+          <div class="photos">
+            <div class="photo" data-photo="t14a"><div class="photo__ph"><div class="photo__cap">Senso-ji<br />photos/t14a.jpg</div></div></div>
+            <div class="photo" data-photo="t14b"><div class="photo__ph"><div class="photo__cap">Nakameguro river<br />photos/t14b.jpg</div></div></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== QUIZ ===================== -->
+<section class="quiz" id="quiz">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">The quiz</p>
+      <h2>Did it stick?</h2>
+      <p class="quiz__intro">Twelve things we genuinely learnt on the road. Get one right and you earn a stamp for the book. No pressure, but the tour guides are watching.</p>
+    </div>
+
+    <div class="quiz__board reveal">
+      <div class="quiz__progress" id="quizProgress">
+        <span class="quiz__count" id="quizCount">Question 1 / 12</span>
+        <span class="quiz__bar"><i id="quizBar"></i></span>
+        <span class="quiz__stamps" id="quizStamps" aria-hidden="true"></span>
+      </div>
+
+      <div id="quizStage"></div>
+
+      <div class="result" id="quizResult">
+        <div class="result__seal"><span>達成</span></div>
+        <div class="result__score" id="resultScore"></div>
+        <div class="result__rank" id="resultRank"></div>
+        <button class="result__again" id="quizAgain" type="button">Run it again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GALLERY ===================== -->
+<section class="gallery">
+  <div class="wrap">
+    <div class="gallery__top reveal">
+      <div>
+        <p class="eyebrow">The photos</p>
+        <h2>The wall</h2>
+      </div>
+      <label class="upload">
+        Add your photos
+        <input type="file" id="galleryInput" accept="image/*" multiple />
+      </label>
+    </div>
+    <p class="gallery__note reveal">Pick photos from this device to drop them straight onto the wall. They stay on your screen only, nothing is uploaded. To make them permanent, drop the files into the <code>photos/</code> folder using the filenames shown on each placeholder above.</p>
+    <div class="gallery__grid" id="galleryGrid">
+      <div class="gph">Tokyo lights</div>
+      <div class="gph">Torii gate</div>
+      <div class="gph">Bowl of ramen</div>
+      <div class="gph">Matcha, again</div>
+      <div class="gph">The stamp book</div>
+      <div class="gph">Shinkansen platform</div>
+      <div class="gph">Kyoto backstreet</div>
+      <div class="gph">Group shot</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CLOSING ===================== -->
+<section class="closing">
+  <div class="wrap reveal">
+    <div class="closing__jp" aria-hidden="true">また 来 ます</div>
+    <blockquote>"I only learn to be content."</blockquote>
+    <p class="closing__cite">— a tour guide, Kyoto, day seven</p>
+  </div>
+</section>
+
+<footer>Made for the eight of us · 日本 2026</footer>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- photo loader: swap in real files when present ---------- */
+  document.querySelectorAll(".photo[data-photo]").forEach(function (slot) {
+    var id = slot.getAttribute("data-photo");
+    var exts = ["jpg", "jpeg", "png", "webp", "JPG"];
+    var i = 0;
+    function tryNext() {
+      if (i >= exts.length) return;
+      var img = new Image();
+      var src = "photos/" + id + "." + exts[i];
+      img.onload = function () {
+        slot.style.backgroundImage = "url('" + src + "')";
+        slot.classList.add("is-loaded");
+      };
+      img.onerror = function () { i++; tryNext(); };
+      img.src = src;
+    }
+    tryNext();
+  });
+
+  /* ---------- scroll reveal ---------- */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+
+  /* ---------- gallery upload (client-side only) ---------- */
+  var input = document.getElementById("galleryInput");
+  var grid = document.getElementById("galleryGrid");
+  input.addEventListener("change", function () {
+    var files = Array.prototype.slice.call(input.files || []);
+    if (files.length && grid.querySelector(".gph")) {
+      grid.querySelectorAll(".gph").forEach(function (n) { n.remove(); });
+    }
+    files.forEach(function (file) {
+      if (!file.type.indexOf) return;
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        var img = document.createElement("img");
+        img.src = ev.target.result;
+        img.alt = file.name;
+        img.loading = "lazy";
+        grid.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  /* ---------- the quiz ---------- */
+  var QUESTIONS = [
+    {
+      q: "The first snack of the trip became a legend. What was inside the 7-Eleven sando?",
+      opts: ["Tuna mayo", "Egg salad (tamago)", "Katsu pork", "Sweet red bean"],
+      answer: 1,
+      learnt: "Egg salad. Japan's convenience-store tamago sando is a national treasure, fluffy milk bread and all."
+    },
+    {
+      q: "\"Pikachu\" is a portmanteau. What does it roughly translate to?",
+      opts: ["Sparking cat", "Thunder fox", "Lightning mouse", "Electric rabbit"],
+      answer: 2,
+      learnt: "Lightning mouse, from pika (a spark) and chu (the squeak a mouse makes)."
+    },
+    {
+      q: "Tanuki statues stand outside shops all over Japan, famous for their comically large…?",
+      opts: ["Ears", "Bellies", "Tails", "Testicles"],
+      answer: 3,
+      learnt: "Testicles. They're a folklore symbol of luck and prosperity, believe it or not."
+    },
+    {
+      q: "At the tea ceremony, how much water goes with 2g of matcha, and how hot?",
+      opts: ["70ml at 80–90°C", "200ml at boiling", "120ml at 60°C", "50ml at 40°C"],
+      answer: 0,
+      learnt: "70ml at 80–90°C, whisked to a froth. The full ceremony runs two to four hours."
+    },
+    {
+      q: "Pocari Sweat, the cult sports drink, was created by what kind of company?",
+      opts: ["A brewery", "A pharmaceutical company", "A car maker", "A noodle brand"],
+      answer: 1,
+      learnt: "A pharmaceutical company (Otsuka). It was designed as a rehydration drink, which explains the taste."
+    },
+    {
+      q: "On the Hiroshima tour we learnt the bomb detonated where, relative to the ground?",
+      opts: ["At ground level", "Around 200m up", "Around 600m up", "Over 2km up"],
+      answer: 2,
+      learnt: "About 600m above the ground, an airburst chosen to maximise the blast radius."
+    },
+    {
+      q: "What was the Hiroshima bomb's codename?",
+      opts: ["Fat Man", "Little Boy", "Trinity", "Thin Man"],
+      answer: 1,
+      learnt: "Little Boy. A typhoon shortly after helped clear the radiation, leaving the land habitable within months."
+    },
+    {
+      q: "In Osaka dialect, what does \"ookini\" mean?",
+      opts: ["Let's go", "Cheers / thank you", "Too expensive", "See you later"],
+      answer: 1,
+      learnt: "Thank you, the warm Osaka way of saying it, with a sense of be well."
+    },
+    {
+      q: "At the Golden Pavilion, when is the gold leaf cleaned each night?",
+      opts: ["Never, it's sealed", "Between 3am and 6am", "At midday", "Once a year"],
+      answer: 1,
+      learnt: "Quietly between 3am and 6am, every single night."
+    },
+    {
+      q: "\"Sausu\" sauce is brown sugar, soy sauce and which third ingredient?",
+      opts: ["Worcestershire sauce", "Fish sauce", "Rice vinegar", "Sesame oil"],
+      answer: 0,
+      learnt: "Worcestershire sauce. The sweet-savoury base behind okonomiyaki and takoyaki."
+    },
+    {
+      q: "Kyoto's geisha go by a different name. What are the fully qualified ones called?",
+      opts: ["Maiko-san", "Geiko-san", "Oiran", "Miko"],
+      answer: 1,
+      learnt: "Geiko-san in Kyoto. Maiko-san are the apprentices still in training."
+    },
+    {
+      q: "To recreate First Crop's espresso tonic, what espresso should you use?",
+      opts: ["A dark, bitter roast", "A light roast with caramel notes", "Decaf", "Instant"],
+      answer: 1,
+      learnt: "A light roast (caramel undertones if you can) poured over a glass of tonic water. Bright and unexpectedly good."
+    }
+  ];
+
+  var stage = document.getElementById("quizStage");
+  var countEl = document.getElementById("quizCount");
+  var barEl = document.getElementById("quizBar");
+  var stampsEl = document.getElementById("quizStamps");
+  var resultEl = document.getElementById("quizResult");
+  var progressEl = document.getElementById("quizProgress");
+  var scoreEl = document.getElementById("resultScore");
+  var rankEl = document.getElementById("resultRank");
+  var keys = ["A", "B", "C", "D"];
+  var idx = 0, score = 0;
+
+  stampsEl.innerHTML = QUESTIONS.map(function () { return "<b></b>"; }).join("");
+  var stampNodes = stampsEl.querySelectorAll("b");
+
+  function rank(n) {
+    var pct = n / QUESTIONS.length;
+    if (pct === 1) return "Honorary tour guide";
+    if (pct >= 0.75) return "Seasoned traveller";
+    if (pct >= 0.5) return "Paying attention";
+    if (pct >= 0.25) return "Jet-lagged";
+    return "Were you even there?";
+  }
+
+  function renderQuestion() {
+    var item = QUESTIONS[idx];
+    countEl.textContent = "Question " + (idx + 1) + " / " + QUESTIONS.length;
+    barEl.style.width = (idx / QUESTIONS.length * 100) + "%";
+
+    var opts = item.opts.map(function (text, i) {
+      return '<button class="opt" type="button" data-i="' + i + '">' +
+             '<span class="opt__key">' + keys[i] + '</span><span>' + text + '</span></button>';
+    }).join("");
+
+    stage.innerHTML =
+      '<div class="q">' +
+        '<div class="q__num">問 ' + String(idx + 1).padStart(2, "0") + '</div>' +
+        '<p class="q__text">' + item.q + '</p>' +
+        '<div class="q__opts">' + opts + '</div>' +
+        '<div class="q__reveal" id="reveal"></div>' +
+        '<button class="q__next" id="next" type="button">' +
+          (idx === QUESTIONS.length - 1 ? "See the score" : "Next") + ' →</button>' +
+      '</div>';
+
+    var optButtons = stage.querySelectorAll(".opt");
+    optButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () { choose(btn, optButtons, item); });
+    });
+    document.getElementById("next").addEventListener("click", advance);
+  }
+
+  function choose(btn, all, item) {
+    var chosen = parseInt(btn.getAttribute("data-i"), 10);
+    all.forEach(function (b) { b.disabled = true; });
+    all[item.answer].classList.add("correct");
+    if (chosen === item.answer) {
+      score++;
+      stampNodes[idx].classList.add("on");
+    } else {
+      btn.classList.add("wrong");
+    }
+    var reveal = document.getElementById("reveal");
+    reveal.innerHTML = (chosen === item.answer ? "<b>Stamped.</b> " : "<b>Close.</b> ") + item.learnt;
+    reveal.classList.add("show");
+    document.getElementById("next").classList.add("show");
+  }
+
+  function advance() {
+    idx++;
+    if (idx < QUESTIONS.length) {
+      renderQuestion();
+      progressEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    } else {
+      finish();
+    }
+  }
+
+  function finish() {
+    barEl.style.width = "100%";
+    countEl.textContent = "Complete";
+    stage.innerHTML = "";
+    scoreEl.textContent = score + " / " + QUESTIONS.length + " stamps";
+    rankEl.textContent = rank(score);
+    resultEl.classList.add("show");
+  }
+
+  document.getElementById("quizAgain").addEventListener("click", function () {
+    idx = 0; score = 0;
+    stampNodes.forEach(function (n) { n.classList.remove("on"); });
+    resultEl.classList.remove("show");
+    renderQuestion();
+  });
+
+  renderQuestion();
+})();
+</script>
+</body>
+</html>

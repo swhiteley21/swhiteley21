@@ -68,6 +68,12 @@
     padding: 96px 24px 64px;
     overflow: hidden;
   }
+  .hero__bg {
+    position: absolute; inset: 0; z-index: 0;
+    background-size: cover; background-position: center;
+    opacity: 0; transition: opacity 0.8s ease;
+  }
+  .hero__bg.is-loaded { opacity: 1; }
   .hero__inner { max-width: var(--maxw); margin: 0 auto; width: 100%; position: relative; z-index: 2; }
   .hero__kicker {
     display: flex; align-items: center; gap: 14px;
@@ -349,6 +355,7 @@
 
 <!-- ===================== HERO ===================== -->
 <header class="hero">
+  <div class="hero__bg" id="heroBg" aria-hidden="true"></div>
   <div class="seal" aria-hidden="true"><span>日本</span></div>
   <div class="hero__inner">
     <p class="hero__kicker">15 — 28 May · Tokyo · Kyoto · Osaka · Hiroshima</p>
@@ -729,16 +736,7 @@
       </label>
     </div>
     <p class="gallery__note reveal">Pick photos from this device to drop them straight onto the wall. They stay on your screen only, nothing is uploaded. To make them permanent, drop the files into the <code>photos/</code> folder using the filenames shown on each placeholder above.</p>
-    <div class="gallery__grid" id="galleryGrid">
-      <div class="gph">Tokyo lights</div>
-      <div class="gph">Torii gate</div>
-      <div class="gph">Bowl of ramen</div>
-      <div class="gph">Matcha, again</div>
-      <div class="gph">The stamp book</div>
-      <div class="gph">Shinkansen platform</div>
-      <div class="gph">Kyoto backstreet</div>
-      <div class="gph">Group shot</div>
-    </div>
+    <div class="gallery__grid" id="galleryGrid"></div>
   </div>
 </section>
 
@@ -759,23 +757,34 @@
 (function () {
   "use strict";
 
-  /* ---------- photo loader: swap in real files when present ---------- */
-  document.querySelectorAll(".photo[data-photo]").forEach(function (slot) {
-    var id = slot.getAttribute("data-photo");
-    var exts = ["jpg", "jpeg", "png", "webp", "JPG"];
+  /* ---------- shared loader: find photos/<id>.<ext> if it exists ---------- */
+  var EXTS = ["jpg", "jpeg", "png", "webp", "JPG", "PNG"];
+  function findPhoto(id, onFound) {
     var i = 0;
-    function tryNext() {
-      if (i >= exts.length) return;
+    (function next() {
+      if (i >= EXTS.length) return;
+      var src = "photos/" + id + "." + EXTS[i];
       var img = new Image();
-      var src = "photos/" + id + "." + exts[i];
-      img.onload = function () {
-        slot.style.backgroundImage = "url('" + src + "')";
-        slot.classList.add("is-loaded");
-      };
-      img.onerror = function () { i++; tryNext(); };
+      img.onload = function () { onFound(src); };
+      img.onerror = function () { i++; next(); };
       img.src = src;
-    }
-    tryNext();
+    })();
+  }
+
+  /* day photo slots: swap in real files when present */
+  document.querySelectorAll(".photo[data-photo]").forEach(function (slot) {
+    findPhoto(slot.getAttribute("data-photo"), function (src) {
+      slot.style.backgroundImage = "url('" + src + "')";
+      slot.classList.add("is-loaded");
+    });
+  });
+
+  /* hero background, with overlay for readable text */
+  findPhoto("hero", function (src) {
+    var bg = document.getElementById("heroBg");
+    bg.style.backgroundImage =
+      "linear-gradient(rgba(22,26,46,0.6), rgba(22,26,46,0.82)), url('" + src + "')";
+    bg.classList.add("is-loaded");
   });
 
   /* ---------- scroll reveal ---------- */
@@ -789,6 +798,26 @@
   /* ---------- gallery upload (client-side only) ---------- */
   var input = document.getElementById("galleryInput");
   var grid = document.getElementById("galleryGrid");
+
+  /* the wall: 12 committed slots (photos/wall-01.jpg ... wall-12.jpg) */
+  var WALL = [
+    "The eight of us", "Tokyo neon at night", "A torii gate", "Best bowl of ramen",
+    "The stamp book, open", "Shinkansen on the platform", "Kyoto backstreet", "Mt Fuji",
+    "A proper matcha", "Dotonbori lights", "A market stall", "A favourite candid"
+  ];
+  WALL.forEach(function (label, n) {
+    var id = "wall-" + String(n + 1).padStart(2, "0");
+    var ph = document.createElement("div");
+    ph.className = "gph";
+    ph.textContent = label + "  ·  " + id;
+    grid.appendChild(ph);
+    findPhoto(id, function (src) {
+      var img = document.createElement("img");
+      img.src = src; img.alt = label; img.loading = "lazy";
+      grid.replaceChild(img, ph);
+    });
+  });
+
   input.addEventListener("change", function () {
     var files = Array.prototype.slice.call(input.files || []);
     if (files.length && grid.querySelector(".gph")) {
